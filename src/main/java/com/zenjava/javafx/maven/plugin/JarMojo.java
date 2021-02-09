@@ -274,7 +274,9 @@ public class JarMojo extends AbstractJfxToolsMojo {
             }).forEach(artifact -> {
                 File artifactFile = artifact.getFile();
                 getLog().debug(String.format("Including classpath element: %s", artifactFile.getAbsolutePath()));
-                File dest = new File(libDir, artifactFile.getName());
+
+                String artifactFileName = artifact.getGroupId() + "." + artifactFile.getName();
+                File dest = new File(libDir, artifactFileName);
                 if( !dest.exists() ){
                     try{
                         if( !skipCopyingDependencies ){
@@ -288,7 +290,7 @@ public class JarMojo extends AbstractJfxToolsMojo {
                         brokenArtifacts.add(artifactFile.getAbsolutePath());
                     }
                 }
-                classpath.append(libFolderName).append("/").append(artifactFile.getName()).append(" ");
+                classpath.append(libFolderName).append("/").append(artifactFileName).append(" ");
             });
             if( !brokenArtifacts.isEmpty() ){
                 throw new MojoExecutionException("Error copying dependencies for application");
